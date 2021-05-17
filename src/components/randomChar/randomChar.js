@@ -15,7 +15,8 @@ export default class RandomChar extends Component {
 
     state = {
         char: {},
-        loading: true
+        loading: true,
+        error: false
     }
 
     onCharLoaded = (char) => {
@@ -34,6 +35,8 @@ export default class RandomChar extends Component {
     }
 
     updateChar() {
+        // const id = 1300000 // тест ошибки
+
         const id = Math.floor(Math.random() * 140 + 25); // диапазон 25-140
         this.gotService.getCharacter(id) // эта конструкция возвращает нам промис
             .then(this.onCharLoaded)

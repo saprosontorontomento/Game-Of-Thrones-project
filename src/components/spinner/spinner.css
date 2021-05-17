@@ -9,6 +9,7 @@
     transform: translateZ(0) scale(1,1);
   }
 }
+
 .ldio-04mrtysve73j div > div {
   position: absolute;
   width: 32px;
@@ -85,7 +86,7 @@
   width: 200px;
   height: 200px;
   display: inline-block;
-  margin: 0 auto;
+  margin: 0 90px;
   overflow: hidden;
 }
 .ldio-04mrtysve73j {
