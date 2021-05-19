@@ -15,6 +15,12 @@ export default class CharDetails extends Component {
         this.updateChar()
     }
 
+    componentDidUpdate(prevProps) { // предыдущие пропсы которые использовались в компоненте
+        if (this.props.charId !== prevProps.charId) { // всегда делаем эту проверку иначе бесконечный цикл
+            this.updateChar();
+        }
+    }
+    
     updateChar() {
         const {charId} = this.props;
         if (!charId) {
@@ -25,6 +31,8 @@ export default class CharDetails extends Component {
             .then((char) => {
                 this.setState({char})
             })
+
+        // this.foo.bar = 0; // test error
     }
 
 
