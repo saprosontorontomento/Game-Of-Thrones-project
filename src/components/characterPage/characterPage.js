@@ -31,7 +31,7 @@ export default class CharacterPage  extends Component {
         if (this.state.error) {
             return <ErrorMessage/>
         }
-
+  
         return (
             <Row>
                 <Col md='6'>

@@ -1,19 +1,18 @@
 import React, {Component} from 'react';
 import './itemList.css';
 import Spinner from '../spinner';
-import gotService from '../../services/gotService';
 
 
 export default class ItemList extends Component {
-
-    gotService = new gotService();
 
     state = { // в этом состоянии будем хранить список наших персонажей
         itemList: null
     }
 
     componentDidMount() {
-        this.gotService.getAllCharacters()
+        const {getData} = this.props
+        
+        getData()
             .then( (itemList) => {
                 this.setState({
                     itemList
