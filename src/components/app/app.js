@@ -53,7 +53,8 @@ export default class App extends Component {
                         <Col md='6'>
                             <ItemList 
                                 onItemSelected={this.onItemSelected}
-                                getData={this.gotService.getAllBooks} />
+                                getData={this.gotService.getAllBooks}
+                                renderItem={(item) => item.name} />
                         </Col>
                         <Col md='6'>
                             <CharDetails charId={this.state.selectedChar}/>
@@ -63,7 +64,8 @@ export default class App extends Component {
                         <Col md='6'>
                             <ItemList 
                                 onItemSelected={this.onItemSelected}
-                                getData={this.gotService.getAllHouses} />
+                                getData={this.gotService.getAllHouses}
+                                renderItem={(item) => item.name} />
                         </Col>
                         <Col md='6'>
                             <CharDetails charId={this.state.selectedChar}/>
