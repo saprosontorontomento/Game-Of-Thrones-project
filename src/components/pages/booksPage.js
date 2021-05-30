@@ -34,7 +34,7 @@ export default class BooksPage extends Component {
             <ItemList 
                 onItemSelected={this.onItemSelected}
                 getData={this.gotService.getAllBooks}
-                renderItem={({name, gender}) => `${name} (${gender})`}/>
+                renderItem={({name}) => name}/>
         )
 
         const itemDetails = (
