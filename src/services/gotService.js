@@ -39,8 +39,8 @@ export default class GotService {
     }
 
     getBook = async (id) => {
-       const book = await this.getResource(`/books/${id}/`);
-        return this.getResource(book);
+        const book = await this.getResource(`/books/${id}/`);
+        return this._transformBook(book);
     }
     
     isSet(data) {
