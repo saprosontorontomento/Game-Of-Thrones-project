@@ -1,66 +1,54 @@
-import React, {Component} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useState, useEffect} from 'react';
 import './randomChar.css';
-import gotService from '../../services/gotService';
 import Spinner from '../spinner';
 import ErrorMessage from '../errorMessage/';
+import GotService from '../../services/gotService';
 
-export default class RandomChar extends Component {
+function RandomChar() {
 
-    gotService = new gotService();
+    const [char, setChar] = useState({}),
+          [loading, setLoading] = useState(true),
+          [error, setError] = useState(false);
 
-    state = {
-        char: {},
-        loading: true,
-        error: false
-    }
+    useEffect(() => {
+        updateChar();
 
-    componentDidMount() {
-        this.updateChar();
-        // this.timerId = setInterval(this.updateChar, 4000);
-    }
+        const timerId = setInterval(updateChar, 4000);
+        
+        return () => {
+            clearInterval(timerId);
+        }
+    }, [])
 
-    componentWillUnmount() {
-        clearInterval(this.timerId);
-    }
+    const gotService = new GotService();
 
-    onCharLoaded = (char) => {
-        this.setState({
-            char,
-            loading: false,
-        })
-    }
-
-    onError = (err) => {
-        this.setState({
-            error: true,
-            loading: false
-        })
-    }
-
-    updateChar = () => {
+    const updateChar = () => {
         // const id = 1300000 // тест ошибки
-
         const id = Math.floor(Math.random() * 140 + 25); // диапазон 25-140
-        this.gotService.getCharacter(id) // эта конструкция возвращает нам промис
-            .then(this.onCharLoaded)
-            .catch(this.onError);
+        gotService.getCharacter(id) // эта конструкция возвращает нам промис
+            .then((data) => {
+                setChar(data);
+                setLoading(false);
+            })
+            .catch(() => {
+                setError(true);
+                setLoading(false);
+            });
     }
 
-    render() {
-        const { char, loading, error } = this.state;
 
-        const errorMessage = error ? <ErrorMessage/>  : null;
-        const spinner = loading ? <Spinner/> : null
-        const content = !(loading || error) ? <View char={char}/> : null;
+    const errorMessage = error ? <ErrorMessage/>  : null;
+    const spinner = loading ? <Spinner/> : null
+    const content = !(loading || error) ? <View char={char}/> : null;
 
-        return (
-            <div className="random-block rounded">
-                {errorMessage}
-                {spinner}
-                {content}
-            </div>
-        );
-    }
+    return (
+        <div className="random-block rounded">
+            {errorMessage}
+            {spinner}
+            {content}
+        </div>
+    );
 }
 
 const View = ({char}) => {
@@ -90,3 +78,4 @@ const View = ({char}) => {
         </>
     )
 }
+export default RandomChar;

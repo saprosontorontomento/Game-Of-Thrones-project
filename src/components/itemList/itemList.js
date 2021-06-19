@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
 import './itemList.css';
 import Spinner from '../spinner';
@@ -5,7 +6,7 @@ import Spinner from '../spinner';
 
 function ItemList({getData, onItemSelected, renderItem }) {
 
-    const [itemList, updateList] = useState([]);
+    const [itemList, updateList] = useState(null);
 
     useEffect(() => {
         getData()

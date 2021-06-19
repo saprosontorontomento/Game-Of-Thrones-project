@@ -1,4 +1,6 @@
-import React, {Component} from 'react';
+import React, {useState, useEffect} from 'react';
+import Spinner from '../spinner';
+import ErrorMessage from '../errorMessage';
 import './itemDetails.css';
 
 
@@ -15,54 +17,60 @@ export {
     Field
 };
 
-export default class ItemDetails extends Component {
-
-
-    state = {
-        item: null
+let itemIdLast;
+function ItemDetails({itemId, getData, children}) {
+   
+ const [item, setItem] = useState([]);
+ const [loading, setLoad] = useState(true);
+ const [error, setError] = useState(false);
+ 
+    useEffect(()=>{
+        
+        if(itemId !==itemIdLast) {
+          
+            if(!itemId){
+                return;
+            }
+ 
+            getData(itemId) 
+                .then((data)=>{
+                    setItem(data);
+                    setLoad(false);
+                    setError(false);
+                })   
+                .catch(onError)
+            return () => { itemIdLast = itemId;}
+        } 
+    })
+   
+   
+    function onError() {
+        console.log('error load')
+        setLoad(false);
+        setError(true);
     }
-
-    componentDidMount() {
-        this.updateItem();
+ 
+    if(!itemId){
+        return <span className = "select-error">Please select a item</span>
     }
-    
-    componentDidUpdate(prevProps) {
-        if (this.props.itemId !== prevProps.itemId) {
-            this.updateItem();
-        }
-    }
-
-    updateItem() {
-        const {itemId, getData} = this.props;
-        if (!itemId) {
-            return;
-        }
-
-        getData(itemId)
-            .then((item) => {
-                this.setState({item})
-            })
-    }
-
-    render() {
-
-        if (!this.state.item) {
-            return <span className='select-error'>Please select item in the list</span>
-        }
-        const {item} = this.state;
-        const {name} = item;
-
-        return (
-            <div className="char-details rounded">
-                <h4>{name}</h4>
-                <ul className="list-group list-group-flush">
-                    {
-                        React.Children.map(this.props.children, (child) => {
-                            return React.cloneElement(child, {item})
-                        })
-                    }
-                </ul>
-            </div>
-        );
-    }
-}
+   
+   const {name} = item; 
+   const spinner = loading ? <Spinner/>: null;
+   const errorMessage = error ? <ErrorMessage/>: null;
+    return (
+        <div>
+            <h4>{name}</h4>
+            <ul>
+                {errorMessage}
+                {spinner}
+                {
+                    React.Children.map(children,(child)=>{
+                       return React.cloneElement(child,{item})
+                    })
+                  
+                }
+            </ul>
+        </div>
+    );
+} 
+export default ItemDetails;
